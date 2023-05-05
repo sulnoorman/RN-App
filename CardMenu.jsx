@@ -87,5 +87,3 @@ const styles = StyleSheet.create({
         color: '#FEAD1D'
     }
 })
-
-//  ** belum ada import komponen komponen apa aja

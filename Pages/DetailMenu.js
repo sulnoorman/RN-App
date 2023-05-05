@@ -1,6 +1,7 @@
 import { StatusBar } from "expo-status-bar"
 import { useFonts } from "expo-font"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
+import * as SplashScreen from 'expo-splash-screen'
 import Button from "../Button"
 import { 
     View,
@@ -10,6 +11,8 @@ import {
  } from "react-native"
 
 import { deleteData, getDataById } from "../Services/crud"
+
+SplashScreen.preventAutoHideAsync()
 
 export const DetailMenu = ({ route, navigation }) => {
     const { idMenu } = route.params
@@ -33,6 +36,16 @@ export const DetailMenu = ({ route, navigation }) => {
             })
     }, [])
 
+    const onLayoutRootView = useCallback(async () => {
+        if (fontsLoaded) {
+            await SplashScreen.hideAsync()
+        }
+    }, [fontsLoaded])
+
+    if (!fontsLoaded) {
+        return null;
+    }
+
     const handleEdit = () => {
         navigation.navigate("EditMenu", { idMenu: idMenu })
     }
@@ -48,7 +61,7 @@ export const DetailMenu = ({ route, navigation }) => {
     }
 
     return (
-        <View style={styles.container}>
+        <View style={styles.container} onLayout={onLayoutRootView}>
             <StatusBar style="dark" />
             
             <Image source={require('../assets/menu.png')} style={styles.imageHeader} />
@@ -105,10 +118,12 @@ const styles = StyleSheet.create({
     },
     name: {
         fontSize: 24,
-        fontWeight: 'bold'
+        // fontWeight: 'bold',
+        fontFamily: 'BentonSans-Bold'
     },
     category: {
-        fontSize: 18
+        fontSize: 18,
+        fontFamily: 'BentonSans-Book'
     },
     price: {
         fontSize: 30,
